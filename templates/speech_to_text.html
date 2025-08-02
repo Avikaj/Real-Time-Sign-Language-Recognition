@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Language to Text/Speech</title>
+    <style>
+        /* Full-page style */
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(90deg,#062394,#f5d547, #062394);
+            background-size: 400% 400%;
+            animation: gradientMove 7s ease infinite;
+            color: white;
+        }
+
+        /* Navigation Bar */
+        nav {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-button {
+            text-decoration: none;
+            color: black;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.789);
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Video Feed */
+        .video-container {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        video {
+            width: 640px;
+            height: 480px;
+            border-radius: 10px;
+            border: 2px solid white;
+        }
+
+        /* Output Text */
+        .output-text {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 50% 50%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 50% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="{{ url_for('home') }}" class="nav-button">Home</a>
+        <a href="{{ url_for('demo') }}" class="nav-button">Back to Demo</a>
+    </nav>
+
+    <!-- Main Content -->
+    <h1 style="color:#620484">Start using gestures</h1>
+    <p style="color:#3c4ebf; font-size: 20px">Enable your camera to start recognizing sign language in real-time.</p>
+
+    <!-- Video Feed -->
+    <div class="video-container">
+        <video id="video" autoplay></video>
+    </div>
+
+    <!-- Recognized Text -->
+    <div class="output-text" id="outputText">Waiting for recognition...</div>
+
+    <!-- Buttons -->
+    <button id="startCaptureBtn">Start Capture</button>
+    <button id="stopCaptureBtn" disabled>Stop Capture</button>
+
+    <script>
+        // Access webcam
+        const video = document.getElementById("video");
+        const outputText = document.getElementById("outputText");
+        const startCaptureBtn = document.getElementById("startCaptureBtn");
+        const stopCaptureBtn = document.getElementById("stopCaptureBtn");
+
+        let mediaStream;
+
+        // Start video capture
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                mediaStream = stream;
+                video.srcObject = stream;
+            })
+            .catch(error => {
+                console.error("Error accessing the webcam:", error);
+            });
+
+        // Simulate ML output (Replace this with real model inference logic)
+        function updateRecognizedText() {
+            const samplePhrases = [
+                "Hello",
+                "How are you?",
+                "Good morning",
+                "Sign Language Recognition Active",
+                "Processing..."
+            ];
+            outputText.innerText = samplePhrases[Math.floor(Math.random() * samplePhrases.length)];
+        }
+
+        // Simulate live text update every 3 seconds
+        setInterval(updateRecognizedText, 3000);
+
+        // Capture start button handler
+        startCaptureBtn.addEventListener("click", () => {
+            startCaptureBtn.disabled = true;
+            stopCaptureBtn.disabled = false;
+            startCaptureBtn.innerText = "Capturing...";
+
+            // Send request to backend to start capturing
+            fetch("/capture-sign", { method: "POST" })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error("Error capturing sign:", error);
+                });
+        });
+
+        // Capture stop button handler
+        stopCaptureBtn.addEventListener("click", () => {
+            stopCaptureBtn.disabled = true;
+            startCaptureBtn.disabled = false;
+            startCaptureBtn.innerText = "Start Capture";
+
+            // Stop the video feed
+            mediaStream.getTracks().forEach(track => track.stop());
+            outputText.innerText = "Capture Stopped!";
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text-to-Speech with Speed Control</title>
+    <style>
+        /* Full-page style */
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(90deg,#062394,#f5d547, #062394);
+            background-size: 400% 400%;
+            animation: gradientMove 7s ease infinite;
+            color: white;
+        }
+
+        /* Navigation Bar */
+        nav {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-button {
+            text-decoration: none;
+            color: black;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.789);
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Container */
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            width: 100%;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        input, select {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background 0.3s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-container label {
+            margin-right: 10px;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 50% 50%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 50% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="home.html" class="nav-button">Home</a>
+        <a href="aboutus.html" class="nav-button">About Us</a>
+        <a href="demo.html" class="nav-button">Back to Demo</a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 style="color:#620484"> Text-to-Speech</h1>
+        <input type="text" id="text-input" placeholder="Enter text here..." />
+        <br>
+        <label for="voice-select" style="color:black; font-size: 20px">Choose a voice:</label>
+        <select id="voice-select"></select>
+        <br><br>
+
+        <!-- Playback speed control -->
+        <div class="slider-container">
+            <label for="speed-slider">Speed:</label>
+            <input type="range" id="speed-slider" min="0.5" max="2.0" step="0.1" value="1">
+            <span id="speed-value">1x</span>
+        </div>
+
+        <br>
+        <button class="btn" onclick="convertToSpeech()">Convert to Speech</button>
+    </div>
+
+    <script>
+        let voices = [];
+
+        function populateVoiceList() {
+            voices = speechSynthesis.getVoices();
+            const voiceSelect = document.getElementById("voice-select");
+            voiceSelect.innerHTML = "";
+
+            voices.forEach((voice, index) => {
+                const option = document.createElement("option");
+                option.value = index;
+                option.textContent = `${voice.name} (${voice.lang})`;
+                voiceSelect.appendChild(option);
+            });
+        }
+
+        function convertToSpeech() {
+            const text = document.getElementById("text-input").value;
+            if (!text) {
+                alert("Please enter some text.");
+                return;
+            }
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            const selectedVoiceIndex = document.getElementById("voice-select").value;
+            utterance.voice = voices[selectedVoiceIndex];
+
+            // Get playback speed from slider
+            const speed = document.getElementById("speed-slider").value;
+            utterance.rate = parseFloat(speed);
+
+            speechSynthesis.speak(utterance);
+        }
+
+        // Update speed value display
+        document.getElementById("speed-slider").addEventListener("input", function() {
+            document.getElementById("speed-value").textContent = this.value + "x";
+        });
+
+        // Wait for voices to load
+        window.speechSynthesis.onvoiceschanged = populateVoiceList;
+        populateVoiceList();
+    </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Sign Language Recognition</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(90deg, #062394, #f5d547, #062394);
+            background-size: 400% 400%;
+            animation: gradientMove 7s ease infinite;
+            color: white;
+        }
+
+        nav {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .nav-button {
+            text-decoration: none;
+            color: black;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.789);
+            border-radius: 5px;
+            margin-right: 10px;
+            transition: 0.3s;
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 50% 50%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 50% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/DEMO.html" class="nav-button">Go to Demo</a>
+    </nav>
+    <h1>Welcome to Real-Time Sign Language Recognition</h1>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!-- templates/home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Language Recognition</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f1f1f1;
+        }
+        video {
+            width: 640px;
+            height: 480px;
+            margin: 20px;
+        }
+        .output-text {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sign Language Recognition</h1>
+    <div>
+        <img src="{{ url_for('video_feed') }}" alt="Video Stream" />
+    </div>
+
+    <div class="output-text" id="outputText">Waiting for recognition...</div>
+
+    <button id="startCaptureBtn">Start Capture</button>
+    <button id="stopCaptureBtn" disabled>Stop Capture</button>
+
+    <script>
+        const startCaptureBtn = document.getElementById("startCaptureBtn");
+        const stopCaptureBtn = document.getElementById("stopCaptureBtn");
+
+        // Start Capture button functionality
+        startCaptureBtn.addEventListener("click", () => {
+            startCaptureBtn.disabled = true;
+            stopCaptureBtn.disabled = false;
+            startCaptureBtn.innerText = "Capturing...";
+        });
+
+        // Stop Capture button functionality
+        stopCaptureBtn.addEventListener("click", () => {
+            stopCaptureBtn.disabled = true;
+            startCaptureBtn.disabled = false;
+            startCaptureBtn.innerText = "Start Capture";
+        });
+    </script>
+</body>
+</html>
