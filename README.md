@@ -8,6 +8,11 @@ We envision this tool being seamlessly integrated into classrooms, Zoom and Micr
 
 ## 🔧 Key components of our system:
 • MediaPipe Holistic for landmark detection
+
 • Transformer-based model optimized with TensorFlow Lite
+
 • Tkinter web app for live and interactive demos
+
 • Real-time gesture-to-text conversion with high accuracy and speed
+
+Link for the dataset: 
