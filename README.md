@@ -15,4 +15,5 @@ We envision this tool being seamlessly integrated into classrooms, Zoom and Micr
 
 • Real-time gesture-to-text conversion with high accuracy and speed
 
-Link for the dataset: 
+
+### Link for the dataset: 
